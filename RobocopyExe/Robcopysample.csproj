@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <Import Project="RobocopyWrapper.targets" />
+
+  <Target Name="CopyBinaries" AfterTargets="Build">
+    <MSBuild Projects="$(MSBuildProjectFullPath)"
+             Targets="RobocopyExe"
+             Properties="SourceDir=$(MSBuildThisFileDirectory)\bin\Debug;
+                         DestDir=D:\Temp\Deploy;
+                         FilePatterns=*.*;
+                         ExcludePatterns=*.dll;*.exe;
+                         ShowFileList=true">
+      <Output TaskParameter="TargetOutputs" ItemName="RobocopyResult" />
+    </MSBuild>
+    <Message Text="Robocopy log: %(RobocopyResult.Identity), ExitCode: %(RobocopyResult.ExitCode)" Importance="High" />
+  </Target>
+</Project>

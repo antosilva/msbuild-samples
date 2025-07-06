@@ -1,0 +1,69 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="RobocopyExe" Returns="@(RobocopyResult)">
+    <PropertyGroup>
+      <SourceDir Condition="'$(SourceDir)'==''">.</SourceDir>
+      <DestDir Condition="'$(DestDir)'==''">.\_deploy</DestDir>
+      <FilePatterns Condition="'$(FilePatterns)'==''">*</FilePatterns>
+      <ExcludePatterns Condition="'$(ExcludePatterns)'==''"></ExcludePatterns>
+      <SkipIfDestNewer Condition="'$(SkipIfDestNewer)'==''">true</SkipIfDestNewer>
+      <CopySubfolders Condition="'$(CopySubfolders)'==''">true</CopySubfolders>
+      <ShowFileList Condition="'$(ShowFileList)'==''">false</ShowFileList>
+      <ShowDirectoryList Condition="'$(ShowDirectoryList)'==''">false</ShowDirectoryList>
+      <LogFile Condition="'$(LogFile)'==''">RobocopyWrapper.log</LogFile>
+    </PropertyGroup>
+
+    <!-- Split FilePatterns and ExcludePatterns properties into space separated items -->
+    <ItemGroup>
+      <IncludePattern Include="$([System.String]::Copy('$(FilePatterns)').Split(';'))" Condition="'$(FilePatterns)' != ''" />
+      <ExcludePattern Include="$([System.String]::Copy('$(ExcludePatterns)').Split(';'))" Condition="'$(ExcludePatterns)' != ''" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!-- Include/Exclude files patterns -->
+      <_IncludePatterns>@(IncludePattern, ' ')</_IncludePatterns>
+      <_ExcludePatterns>@(ExcludePattern, ' ')</_ExcludePatterns>
+      <_ExcludeSwitch Condition="'$(_ExcludePatterns)' != ''">/XF $(_ExcludePatterns)</_ExcludeSwitch>
+
+      <!-- Subdirectory switch /XO -->
+      <_SkipIfDestNewerSwitch Condition="'$(SkipIfDestNewer)'=='true'">/XO</_SkipIfDestNewerSwitch>
+      <_SkipIfDestNewerSwitch Condition="'$(SkipIfDestNewer)'!='true'"></_SkipIfDestNewerSwitch>
+
+      <!-- Display files list /NFL -->
+      <_NoFileListSwitch Condition="'$(ShowFileList)'=='true'"></_NoFileListSwitch>
+      <_NoFileListSwitch Condition="'$(ShowFileList)'!='true'">/NFL</_NoFileListSwitch>
+
+      <!-- Display directories list /NFL -->
+      <_NoDirectoryListSwitch Condition="'$(ShowDirectoryList)'=='true'"></_NoDirectoryListSwitch>
+      <_NoDirectoryListSwitch Condition="'$(ShowDirectoryList)'!='true'">/NDL</_NoDirectoryListSwitch>
+
+      <!-- Copy subfolders including empty folders -->
+      <_CopySubfoldersSwitch Condition="'$(CopySubfolders)'=='true'">/E</_CopySubfoldersSwitch>
+      <_CopySubfoldersSwitch Condition="'$(CopySubfolders)'!='true'"></_CopySubfoldersSwitch>
+    </PropertyGroup>
+
+    <Exec
+      Command='robocopy "$(SourceDir)" "$(DestDir)" $(_IncludePatterns) $(_ExcludeSwitch) $(_SkipIfDestNewerSwitch) $(_SubdirSwitch) /LOG:"$(LogFile)" $(_NoFileListSwitch) $(_NoDirectoryListSwitch) $(_CopySubfoldersSwitch)'
+      WorkingDirectory="$(MSBuildProjectDirectory)"
+      IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="RobocopyExitCode" />
+      <!-- 0–7: Success or minor issues (not considered errors by robocopy)
+                0: no files were copied
+                1: all files were copied
+                2: extra files or directories detected, no files copied
+                3: files copied and extra files/directories detected
+                4: some files mismatched, no files copied
+                5: files copied and some file smismatched
+                6: extra files/directories and mismatche, no files copied
+                7: files copied, extra files/directories, and mismatches
+          8+: At least one failure occurred (file copy error, access denied, etc.) -->
+    </Exec>
+
+    <ItemGroup>
+      <RobocopyResult Include="$(LogFile)">
+        <ExitCode>$(RobocopyExitCode)</ExitCode>
+      </RobocopyResult>
+    </ItemGroup>
+  </Target>
+
+</Project>
