@@ -1,0 +1,117 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Visual Studio Code workspace
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Visual Studio working folder
+.vs/
+
+# Dotnet CLI artifacts
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Npm & Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored if you use PackageReference
+packages/
+# NuGet v3's project.json files
+project.json
+# NuGet Symbol Packages
+*.snupkg
+
+# DotCover
+*.dotCover
+
+# Coverage results
+*.coverage
+*.coveragexml
+TestResults/
+*.trx
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*_i.asm
+*_p.asm
+*.cachefile
+
+# Others
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+*.DotSettings
+
+# Local history for Visual Studio
+.localhistory/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# VS Code settings
+.history/
+
+# Rider settings
+.idea/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Mac
+.DS_Store
+
+# Windows
+*.stackdump
+
+# MSBuild generated files
+*.Build.Caches/

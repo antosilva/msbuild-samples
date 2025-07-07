@@ -12,7 +12,7 @@
   <Target Name="CopyBinaries" AfterTargets="Build">
     <MSBuild Projects="$(MSBuildProjectFullPath)"
              Targets="RobocopyExe"
-             Properties="SourceDir=$(MSBuildThisFileDirectory)\bin\Debug;
+             Properties="SourceDir=$(MSBuildThisFileDirectory)\bin\Debug\;
                          DestDir=D:\Temp\Deploy;
                          FilePatterns=*.*;
                          ExcludePatterns=*.dll;*.exe;
